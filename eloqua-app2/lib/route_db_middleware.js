@@ -69,13 +69,17 @@ module.exports =
 	{ 
 		return function(req, res, next) 
 		{
-	      if (!req.params.guid) 
-	      {	
-	      	return next(new Error("Failed to preview an instance... No GUID Supplied"));
-	      }
-	    var res = fetchRecord(db, req);
-	    req.message = res.componentImage;
-	    next();
+			console.log("previewInstance");
+	      	if (!req.params.guid) 
+	      	{	
+	      		return next(new Error("Failed to preview an instance... No GUID Supplied"));
+	      	}
+
+	    	var res = fetchRecord(db, req);
+	    	console.log(req);
+	    	console.log(res);
+	    	req.message = res.componentImage;
+	    	next();
 	  };
 	},
 	renderInstance: function(db) 
