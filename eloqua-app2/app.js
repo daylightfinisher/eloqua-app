@@ -4,7 +4,7 @@ app 			 = express.createServer(),
 service_document = require('./lib/service_document'),
 middle 			 = require('./lib/route_db_middleware'),
 renderer 		 = require('./lib/route_rendering_middleware'),
-port 			 = process.env.PORT || 3000;
+port 			 = process.env.PORT || 8080;
  
 /*****************************************************************************
 * Application Settings
