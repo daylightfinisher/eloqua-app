@@ -18,9 +18,9 @@ module.exports =
 			url: BASE_IMG_URL +'/TrendMicro-EloquaApp.png'
 		},
 		createInstance  : BASE_COMP_URL + '/components/create/{Id}',
-		removeInstance  : BASE_COMP_URL + '/remove/{Id}',
-		configurationUrl: BASE_COMP_URL + '/configure/{Id}?assetId={AssetId}&contactId={ContactId}',
-		renderInstance  : BASE_COMP_URL + '/render/{Id}?assetId={AssetId}&contactId={ContactId}&visitorId={VisitorId}',
-		instanceImage   : BASE_COMP_URL + '/preview/{Id}?assetId={AssetId}&contactId={ContactId}&visitorId={VisitorId}'
+		removeInstance  : BASE_COMP_URL + '/components/remove/{Id}',
+		configurationUrl: BASE_COMP_URL + '/components/configure/{Id}?assetId={AssetId}&contactId={ContactId}',
+		renderInstance  : BASE_COMP_URL + '/components/render/{Id}?assetId={AssetId}&contactId={ContactId}&visitorId={VisitorId}',
+		instanceImage   : BASE_COMP_URL + '/components/preview/{Id}?assetId={AssetId}&contactId={ContactId}&visitorId={VisitorId}'
 	}]
 };
