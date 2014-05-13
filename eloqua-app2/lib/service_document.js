@@ -1,5 +1,5 @@
-var BASE_IMG_URL = "http://127.0.0.1:8080/images";
-var BASE_COMP_URL = "http://127.0.0.1:8080";
+var BASE_IMG_URL = "http://ec2-54-187-67-219.us-west-2.compute.amazonaws.com/images";
+var BASE_COMP_URL = "http://ec2-54-187-67-219.us-west-2.compute.amazonaws.com";
  
 module.exports = 
 {
