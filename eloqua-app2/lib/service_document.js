@@ -1,21 +1,21 @@
-var BASE_IMG_URL = "http://ec2-54-187-67-219.us-west-2.compute.amazonaws.com//images";
-var BASE_COMP_URL = "http://ec2-54-187-67-219.us-west-2.compute.amazonaws.com/";
+var BASE_IMG_URL = "http://127.0.0.1:8080/images";
+var BASE_COMP_URL = "http://127.0.0.1:8080";
  
 module.exports = 
 {
-	name: 'The CCPV2 Test Provider',
-	version: '2.0.0',
-	logoUrl: BASE_IMG_URL + "/logo-journey.gif",
+	name: 'Trend Micro - Eloqua App',
+	version: '0.0.1',
+	logoUrl: BASE_IMG_URL + "/TrendMicro-Logo.png",
 	components: [
 	{
 		name: 'My First Component',
 		description: "This our first cloud component",
-		iconUrl: BASE_IMG_URL +'/logo-journey.gif',
+		iconUrl: BASE_IMG_URL +'/TrendMicro-EloquaApp.png',
 		componentImage: 
 		{
-			height: '200',
-			width: '200',
-			url: BASE_IMG_URL +'/logo-journey.gif'
+			height: '50',
+			width: '135',
+			url: BASE_IMG_URL +'/TrendMicro-EloquaApp.png'
 		},
 		createInstance  : BASE_COMP_URL + '/components/create/{Id}',
 		removeInstance  : BASE_COMP_URL + '/remove/{Id}',
