@@ -8,7 +8,7 @@ var bodyParser 		= require('body-parser');
 var routes 			= require('./routes/index');
 var users 			= require('./routes/users');
 var routes_livechatinc		= require('./routes/livechatinc_routes');
-var routes_eloqua 			= require('./routes/eloqua_routes');
+//var routes_eloqua 			= require('./routes/eloqua_routes');
 
 
 var renderer 		 = require('./lib/route_rendering_middleware');
@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/apps/livechatinc', routes_livechatinc);
-app.use('/apps/eloqua', routes_eloqua);
+//app.use('/apps/eloqua', routes_eloqua);
 
  
 module.exports = app;
