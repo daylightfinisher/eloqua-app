@@ -1,11 +1,11 @@
 var express = require('express');
 var async   = require('async');
 var router  = express.Router();
-var Eloqua  = require('../../../eloqua-request');
+var Eloqua  = require('eloqua-request');
 var _ = require('underscore');
 var config = require('../config');
 
-var LiveChatApi = require('../../../api-client-nodejs').LiveChatApi;
+var LiveChatApi = require('livechatapi').LiveChatApi;
 var api = new LiveChatApi(config.liveChatUsername, config.liveChatPassword);
 var eloqua = new Eloqua(config.eloquaCompany, config.eloquaUsername, config.eloquaPassword);
  
