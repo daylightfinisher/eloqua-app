@@ -204,6 +204,7 @@ router.post('/v1/webhooks', function(req, res)
   	var license_id 	= req.body.license_id; 
   	var visitor_id 	= req.body.visitor.id; 
   	var visitor_email 	= req.body.visitor.email; 
+  	console.log(req.body);
 
   	var output = "";
   	output += "event_type: "+event_type+" <br>";
