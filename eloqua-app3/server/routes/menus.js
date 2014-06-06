@@ -2,19 +2,23 @@
 
 var mean = require('meanio');
 
-module.exports = function(app) {
+module.exports = function(app)
+{
 
     app.route('/admin/menu/:name')
-        .get(function(req, res) {
+        .get(function(req, res)
+        {
             var roles = (req.user ? req.user.roles : ['anonymous']);
             var menu = req.params.name ? req.params.name : 'main';
             var defaultMenu = (req.query.defaultMenu ? req.query.defaultMenu : []);
 
-            defaultMenu.forEach(function(item, index) {
+            defaultMenu.forEach(function(item, index)
+            {
                 defaultMenu[index] = JSON.parse(item);
             });
 
-            var items = mean.menus.get({
+            var items = mean.menus.get(
+            {
                 roles: roles,
                 menu: menu,
                 defaultMenu: defaultMenu

@@ -4,13 +4,16 @@ var express = require('express'),
     appPath = process.cwd();
 
 var mean = require('meanio');
-mean.app('Mean Demo App', {});
+mean.app('Mean Demo App',
+{});
 
-module.exports = function(passport, db) {
-
-    function bootstrapModels() {
+module.exports = function(passport, db)
+{
+    function bootstrapModels()
+    {
         // Bootstrap models
-        require('../util').walk(appPath + '/server/models', null, function(path) {
+        require('../util').walk(appPath + '/server/models', null, function(path)
+        {
             require(path);
         });
     }
@@ -20,24 +23,29 @@ module.exports = function(passport, db) {
     // Bootstrap passport config
     require(appPath + '/server/config/passport')(passport);
 
-    function bootstrapDependencies() {
+    function bootstrapDependencies()
+    {
         // Register passport dependency
-        mean.register('passport', function() {
+        mean.register('passport', function()
+        {
             return passport;
         });
 
         // Register auth dependency
-        mean.register('auth', function() {
+        mean.register('auth', function()
+        {
             return require(appPath + '/server/routes/middlewares/authorization');
         });
 
         // Register database dependency
-        mean.register('database', {
+        mean.register('database',
+        {
             connection: db
         });
 
         // Register app dependency
-        mean.register('app', function() {
+        mean.register('app', function()
+        {
             return app;
         });
     }

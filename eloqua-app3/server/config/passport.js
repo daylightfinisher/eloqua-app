@@ -7,45 +7,60 @@ var mongoose = require('mongoose'),
     GitHubStrategy = require('passport-github').Strategy,
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
     LinkedinStrategy = require('passport-linkedin').Strategy,
+    EloquaStrategy = require('passport-oauth').OAuth2Strategy,
     User = mongoose.model('User'),
     config = require('./config');
 
-module.exports = function(passport) {
+module.exports = function(passport)
+{
 
     // Serialize the user id to push into the session
-    passport.serializeUser(function(user, done) {
+    passport.serializeUser(function(user, done)
+    {
         done(null, user.id);
     });
 
     // Deserialize the user object based on a pre-serialized token
     // which is the user id
-    passport.deserializeUser(function(id, done) {
-        User.findOne({
+    passport.deserializeUser(function(id, done)
+    {
+        User.findOne(
+        {
             _id: id
-        }, '-salt -hashed_password', function(err, user) {
+        }, '-salt -hashed_password', function(err, user)
+        {
             done(err, user);
         });
     });
 
     // Use local strategy
-    passport.use(new LocalStrategy({
+    passport.use(new LocalStrategy(
+        {
             usernameField: 'email',
             passwordField: 'password'
         },
-        function(email, password, done) {
-            User.findOne({
+        function(email, password, done)
+        {
+            User.findOne(
+            {
                 email: email
-            }, function(err, user) {
-                if (err) {
+            }, function(err, user)
+            {
+                if (err)
+                {
                     return done(err);
                 }
-                if (!user) {
-                    return done(null, false, {
+                if (!user)
+                {
+                    return done(null, false,
+                    {
                         message: 'Unknown user'
                     });
                 }
-                if (!user.authenticate(password)) {
-                    return done(null, false, {
+                if (!user.authenticate(password))
+                {
+                    return done(null, false,
+                    {
                         message: 'Invalid password'
                     });
                 }
@@ -55,31 +70,41 @@ module.exports = function(passport) {
     ));
 
     // Use twitter strategy
-    passport.use(new TwitterStrategy({
+    passport.use(new TwitterStrategy(
+        {
             consumerKey: config.twitter.clientID,
             consumerSecret: config.twitter.clientSecret,
             callbackURL: config.twitter.callbackURL
         },
-        function(token, tokenSecret, profile, done) {
-            User.findOne({
+        function(token, tokenSecret, profile, done)
+        {
+            User.findOne(
+            {
                 'twitter.id_str': profile.id
-            }, function(err, user) {
-                if (err) {
+            }, function(err, user)
+            {
+                if (err)
+                {
                     return done(err);
                 }
-                if (!user) {
-                    user = new User({
+                if (!user)
+                {
+                    user = new User(
+                    {
                         name: profile.displayName,
                         username: profile.username,
                         provider: 'twitter',
                         twitter: profile._json,
                         roles: ['authenticated']
                     });
-                    user.save(function(err) {
+                    user.save(function(err)
+                    {
                         if (err) console.log(err);
                         return done(err, user);
                     });
-                } else {
+                }
+                else
+                {
                     return done(err, user);
                 }
             });
@@ -87,20 +112,27 @@ module.exports = function(passport) {
     ));
 
     // Use facebook strategy
-    passport.use(new FacebookStrategy({
+    passport.use(new FacebookStrategy(
+        {
             clientID: config.facebook.clientID,
             clientSecret: config.facebook.clientSecret,
             callbackURL: config.facebook.callbackURL
         },
-        function(accessToken, refreshToken, profile, done) {
-            User.findOne({
+        function(accessToken, refreshToken, profile, done)
+        {
+            User.findOne(
+            {
                 'facebook.id': profile.id
-            }, function(err, user) {
-                if (err) {
+            }, function(err, user)
+            {
+                if (err)
+                {
                     return done(err);
                 }
-                if (!user) {
-                    user = new User({
+                if (!user)
+                {
+                    user = new User(
+                    {
                         name: profile.displayName,
                         email: profile.emails[0].value,
                         username: profile.username || profile.emails[0].value.split('@')[0],
@@ -108,11 +140,58 @@ module.exports = function(passport) {
                         facebook: profile._json,
                         roles: ['authenticated']
                     });
-                    user.save(function(err) {
+                    user.save(function(err)
+                    {
                         if (err) console.log(err);
                         return done(err, user);
                     });
-                } else {
+                }
+                else
+                {
+                    return done(err, user);
+                }
+            });
+        }
+    ));
+
+    passport.use('eloqua', new EloquaStrategy(
+        {
+            authorizationURL: config.eloqua.authorizationURL,
+            tokenURL: config.eloqua.tokenURL,
+            clientID: config.eloqua.clientID,
+            clientSecret: config.eloqua.clientSecret,
+            callbackURL: config.eloqua.callbackURL
+        },
+        function(accessToken, refreshToken, profile, done)
+        {
+            User.findOne(
+            {
+                'eloqua.id': profile.id
+            }, function(err, user)
+            {
+                if (err)
+                {
+                    return done(err);
+                }
+                if (!user)
+                {
+                    user = new User(
+                    {
+                        name: profile.displayName,
+                        email: profile.emails[0].value,
+                        username: profile.username || profile.emails[0].value.split('@')[0],
+                        provider: 'eloqua',
+                        eloqua: profile._json,
+                        roles: ['authenticated']
+                    });
+                    user.save(function(err)
+                    {
+                        if (err) console.log(err);
+                        return done(err, user);
+                    });
+                }
+                else
+                {
                     return done(err, user);
                 }
             });
@@ -120,17 +199,23 @@ module.exports = function(passport) {
     ));
 
     // Use github strategy
-    passport.use(new GitHubStrategy({
+    passport.use(new GitHubStrategy(
+        {
             clientID: config.github.clientID,
             clientSecret: config.github.clientSecret,
             callbackURL: config.github.callbackURL
         },
-        function(accessToken, refreshToken, profile, done) {
-            User.findOne({
+        function(accessToken, refreshToken, profile, done)
+        {
+            User.findOne(
+            {
                 'github.id': profile.id
-            }, function(err, user) {
-                if (!user) {
-                    user = new User({
+            }, function(err, user)
+            {
+                if (!user)
+                {
+                    user = new User(
+                    {
                         name: profile.displayName,
                         email: profile.emails[0].value,
                         username: profile.username,
@@ -138,11 +223,14 @@ module.exports = function(passport) {
                         github: profile._json,
                         roles: ['authenticated']
                     });
-                    user.save(function(err) {
+                    user.save(function(err)
+                    {
                         if (err) console.log(err);
                         return done(err, user);
                     });
-                } else {
+                }
+                else
+                {
                     return done(err, user);
                 }
             });
@@ -150,17 +238,23 @@ module.exports = function(passport) {
     ));
 
     // Use google strategy
-    passport.use(new GoogleStrategy({
+    passport.use(new GoogleStrategy(
+        {
             clientID: config.google.clientID,
             clientSecret: config.google.clientSecret,
             callbackURL: config.google.callbackURL
         },
-        function(accessToken, refreshToken, profile, done) {
-            User.findOne({
+        function(accessToken, refreshToken, profile, done)
+        {
+            User.findOne(
+            {
                 'google.id': profile.id
-            }, function(err, user) {
-                if (!user) {
-                    user = new User({
+            }, function(err, user)
+            {
+                if (!user)
+                {
+                    user = new User(
+                    {
                         name: profile.displayName,
                         email: profile.emails[0].value,
                         username: profile.emails[0].value,
@@ -168,11 +262,14 @@ module.exports = function(passport) {
                         google: profile._json,
                         roles: ['authenticated']
                     });
-                    user.save(function(err) {
+                    user.save(function(err)
+                    {
                         if (err) console.log(err);
                         return done(err, user);
                     });
-                } else {
+                }
+                else
+                {
                     return done(err, user);
                 }
             });
@@ -180,29 +277,38 @@ module.exports = function(passport) {
     ));
 
     // use linkedin strategy
-    passport.use(new LinkedinStrategy({
+    passport.use(new LinkedinStrategy(
+        {
             consumerKey: config.linkedin.clientID,
             consumerSecret: config.linkedin.clientSecret,
             callbackURL: config.linkedin.callbackURL,
             profileFields: ['id', 'first-name', 'last-name', 'email-address']
         },
-        function(accessToken, refreshToken, profile, done) {
-            User.findOne({
+        function(accessToken, refreshToken, profile, done)
+        {
+            User.findOne(
+            {
                 'linkedin.id': profile.id
-            }, function(err, user) {
-                if (!user) {
-                    user = new User({
+            }, function(err, user)
+            {
+                if (!user)
+                {
+                    user = new User(
+                    {
                         name: profile.displayName,
                         email: profile.emails[0].value,
                         username: profile.emails[0].value,
                         provider: 'linkedin',
                         roles: ['authenticated']
                     });
-                    user.save(function(err) {
+                    user.save(function(err)
+                    {
                         if (err) console.log(err);
                         return done(err, user);
                     });
-                } else {
+                }
+                else
+                {
                     return done(err, user);
                 }
             });
