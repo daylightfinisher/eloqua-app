@@ -15,15 +15,21 @@ var eloqua = new Eloqua(config.eloquaCompany, config.eloquaUsername, config.eloq
 
 router.get('/v1/', function (req, res) 
 {
+	console.log("/v1/");
 	api.visitors.list(function(visitor_data)
 	{	
+		console.log("api.visitors.list");
 		if (visitor_data.length > 0)
 		{
-			getAdditonalData("", visitor_data[0].id, function(data)
+			getAdditonalData("mail@relatedpixels.com", visitor_data[0].id, function(data)
 			{ 
 				res.send(data);
 			});
-		}	
+		}
+		else
+		{
+			res.send("no visitors");
+		}
 	});	
 });
 
@@ -31,6 +37,7 @@ router.get('/v1/', function (req, res)
 
 function getAdditonalData(email, id, f_callback)
 {
+	console.log("getAdditonalData("+email+","+id+")")
 	async.parallel(
 	[
 	    function(callback)
@@ -39,30 +46,34 @@ function getAdditonalData(email, id, f_callback)
 	    	{
 				eloqua.get('/API/REST/2.0/data/contacts?search='+email+'&count=1&page=1&depth=complete', function(err, response)
 				{
-					//console.log("response: %j", response);
+					console.log("err:".err);
+					console.log("response: %j", response);
 					var eloquaData = {};
-					if(response["elements"][0])
+					if(resposne != null)
 					{
-						var d = response["elements"][0];
-
-						if(d["firstName"])
+						if(response["elements"][0])
 						{
-							eloquaData["EQ FirstName"] = d["firstName"];
-						}
+							var d = response["elements"][0];
 
-						if(d["lastName"])
-						{
-							eloquaData["EQ LastName"] = d["lastName"];
-						}
+							if(d["firstName"])
+							{
+								eloquaData["EQ FirstName"] = d["firstName"];
+							}
 
-						if(d["businessPhone"])
-						{
-							eloquaData["EQ BusinessPhone"] = d["businessPhone"];
-						}
+							if(d["lastName"])
+							{
+								eloquaData["EQ LastName"] = d["lastName"];
+							}
 
-						if(d["company"])
-						{
-							eloquaData["EQ Company"] = d["company"];
+							if(d["businessPhone"])
+							{
+								eloquaData["EQ BusinessPhone"] = d["businessPhone"];
+							}
+
+							if(d["company"])
+							{
+								eloquaData["EQ Company"] = d["company"];
+							}
 						}
 					}
 			  		//res.send("hello xx"+response);
@@ -82,7 +93,7 @@ function getAdditonalData(email, id, f_callback)
 			{
 				//ip = "216.104.22.130";
 				//ip = "91.23.79.61";
-				console.log(ip);
+				console.log("ip:"+ ip);
 				getLeadenhancerData(ip, function(data)
 				{
 					//console.log(data);
