@@ -42,7 +42,7 @@ function getAdditonalData(email, id, f_callback)
 	[
 	    function(callback)
 	    {  	
-	    	if(email != "")
+	    	if(email != "" && email != undefined)
 	    	{
 				eloqua.get('/API/REST/2.0/data/contacts?search='+email+'&count=1&page=1&depth=complete', function(err, response)
 				{
@@ -96,7 +96,7 @@ function getAdditonalData(email, id, f_callback)
 				console.log("ip:"+ ip);
 				getLeadenhancerData(ip, function(data)
 				{
-					//console.log(data);
+					console.log("lh data:"+data);
 					var leadenhancerData = {};
 
 					//leadenhancerData["a"] = "b";
