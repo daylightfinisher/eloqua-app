@@ -49,7 +49,7 @@ function getAdditonalData(email, id, f_callback)
 					console.log("err:".err);
 					console.log("response: %j", response);
 					var eloquaData = {};
-					if(resposne != null)
+					if(response != null)
 					{
 						if(response["elements"][0])
 						{
