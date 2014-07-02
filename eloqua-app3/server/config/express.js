@@ -123,7 +123,6 @@ module.exports = function(app, passport, db)
 
     function themeHandler(req, res)
     {
-
         res.setHeader('content-type', 'text/css');
 
         gfs.files.findOne(

@@ -3,9 +3,11 @@
 var path = require('path');
 var rootPath = path.normalize(__dirname + '/../../..');
 
-module.exports = {
+module.exports = 
+{
 	root: rootPath,
 	port: process.env.PORT || 8080,
+	sslport: 8082,
 	hostname: process.env.HOST || process.env.HOSTNAME,
 	db: process.env.MONGOHQ_URL,
 	templateEngine: 'swig',

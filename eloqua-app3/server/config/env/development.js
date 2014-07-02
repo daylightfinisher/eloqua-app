@@ -39,10 +39,16 @@ module.exports =
 	},
 	eloqua :
 	{
-		authorizationURL: 'https://localhost:3000/auth/oauth2/authorize',
+		authorizationURL: 'https://login.eloqua.com/auth/oauth2/authorize',
         tokenURL: 'https://login.eloqua.com/auth/oauth2/token',
-        clientID: 'API_KEY',
+        clientID: 'a9efe348-33e3-4e00-b548-b9abfc0d187d',
         clientSecret: 'shhh-its-a-secret',
-        callbackURL: 'https://localhost:3000/auth/eloqua/callback'
+        callbackURL: 'https://ec2-54-187-67-219.us-west-2.compute.amazonaws.com/auth/eloqua/callback'
+
+        /*authorizationURL: 'https://ec2-54-187-67-219.us-west-2.compute.amazonaws.com/auth/oauth2/authorize',
+        tokenURL: 'https://login.eloqua.com/auth/oauth2/token',
+        clientID: 'a9efe348-33e3-4e00-b548-b9abfc0d187d',
+        clientSecret: 'shhh-its-a-secret',
+        callbackURL: 'https://ec2-54-187-67-219.us-west-2.compute.amazonaws.com/auth/eloqua/callback'*/
 	}
 };

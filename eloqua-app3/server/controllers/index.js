@@ -2,12 +2,13 @@
 
 var mean = require('meanio');
 
-exports.render = function(req, res) {
-
+exports.render = function(req, res) 
+{
     var modules = [];
 
     // Preparing angular modules list with dependencies
-    for (var name in mean.modules) {
+    for (var name in mean.modules) 
+    {
         modules.push({
             name: name,
             module: 'mean.' + name,
@@ -15,13 +16,16 @@ exports.render = function(req, res) {
         });
     }
 
-    function isAdmin() {
+    function isAdmin() 
+    {
         return req.user && req.user.roles.indexOf('admin') !== -1;
     }
 
     // Send some basic starting info to the view
-    res.render('index', {
-        user: req.user ? {
+    res.render('index', 
+    {
+        user: req.user ? 
+        {
             name: req.user.name,
             _id: req.user._id,
             username: req.user.username,

@@ -175,6 +175,8 @@ module.exports = function(passport)
                 }
                 if (!user)
                 {
+                    console.log('user:'+user);
+                    /*
                     user = new User(
                     {
                         name: profile.displayName,
@@ -188,7 +190,7 @@ module.exports = function(passport)
                     {
                         if (err) console.log(err);
                         return done(err, user);
-                    });
+                    });*/
                 }
                 else
                 {
