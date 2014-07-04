@@ -190,13 +190,15 @@ function getLeadenhancerData(ip, callback)
 function getIPbyID(id, callback)
 {
 	var ip = "11";
-
+	console.log("getIPbyID("+id+", &callback);");
 	api.visitors.list( function(data)
 	{
+		console.log("current visitors #"+data.length);
 		//console.log(data);
 		//console.log(data[0].id);
 		for(var i = 0; i < data.length; i++)
 		{
+			console.log(data[i].id + " "+data[i].name);
 			if(data[i].id == id)
 			{
 				return callback(data[i].ip);
@@ -225,6 +227,7 @@ router.post('/v1/webhooks', function(req, res)
 
   	if(event_type == "chat_started")
   	{
+	  	//getAdditonalData("mail@relatedpixels.com", visitor_id, function(data)
 	  	getAdditonalData(visitor_email, visitor_id, function(data)
 		{ 
 			params = {};
