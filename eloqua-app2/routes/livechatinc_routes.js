@@ -48,7 +48,7 @@ function getAdditonalData(email, id, f_callback)
 				{
 					console.log("eq err:"+err);
 					console.log("eq response: %j", response);
-					var eloquaData = {};
+					var eloquaData = [];
 					if(response != null)
 					{
 						if(response["elements"][0])
@@ -57,22 +57,34 @@ function getAdditonalData(email, id, f_callback)
 
 							if(d["firstName"])
 							{
-								eloquaData["EQ FirstName"] = d["firstName"];
+								var t = {};
+								t["name"] = "EQ FirstName";
+								t["value"] = d["firstName"];
+								eloquaData.push(t);
 							}
 
 							if(d["lastName"])
 							{
-								eloquaData["EQ LastName"] = d["lastName"];
+								var t = {};
+								t["name"] = "EQ LastName";
+								t["value"] = d["lastName"];
+								eloquaData.push(t);
 							}
 
 							if(d["businessPhone"])
 							{
-								eloquaData["EQ BusinessPhone"] = d["businessPhone"];
+								var t = {};
+								t["name"] = "EQ BusinessPhone";
+								t["value"] = d["businessPhone"];
+								eloquaData.push(t);
 							}
 
 							if(d["company"])
 							{
-								eloquaData["EQ Company"] = d["company"];
+								var t = {};
+								t["name"] = "EQ Company";
+								t["value"] = d["company"];
+								eloquaData.push(t);
 							}
 						}
 					}
@@ -98,25 +110,37 @@ function getAdditonalData(email, id, f_callback)
 				getLeadenhancerData(ip, function(data)
 				{
 					console.log("lh data:"+data);
-					var leadenhancerData = {};
+					var leadenhancerData = [];
 
 					//leadenhancerData["a"] = "b";
 					var d = data[0];
 					if(d["name"])
 					{
-						leadenhancerData["LH Company"] = d["name"];
+						var t = {};
+						t["name"] = "LH Company";
+						t["value"] = d["name"];
+						leadenhancerData.push(t);
 					}
 					if(d["duns"])
 					{
-						leadenhancerData["LH Duns"] = d["duns"];
+						var t = {};
+						t["name"] = "LH Duns";
+						t["value"] = d["duns"];
+						leadenhancerData.push(t);
 					}
 					if(d["noofemployees"])
 					{
-						leadenhancerData["LH #Employees"] = d["noofemployees"];
+						var t = {};
+						t["name"] = "LH #Employees";
+						t["value"] = d["noofemployees"];
+						leadenhancerData.push(t);
 					}
 					if(d["sales"])
 					{
-						leadenhancerData["LH Sales"] = d["sales"];
+						var t = {};
+						t["name"] = "LH Sales";
+						t["value"] = d["sales"];
+						leadenhancerData.push(t);
 					}
 
 					if(d["address"])
@@ -124,17 +148,27 @@ function getAdditonalData(email, id, f_callback)
 						var address = d["address"];
 						if(address["city"])
 						{
+							var t = {};
+							t["name"] = "LH City";
+							t["value"] = address["city"];
+							leadenhancerData.push(t);
 							leadenhancerData["LH City"] = address["city"];
 						}
 
 						if(address["region"])
 						{
-							leadenhancerData["LH Region"] = address["region"];
+							var t = {};
+							t["name"] = "LH Region";
+							t["value"] = address["region"];
+							leadenhancerData.push(t);
 						}
 
 						if(address["country"])
 						{
-							leadenhancerData["LH Country"] = address["country"];
+							var t = {};
+							t["name"] = "LH Country";
+							t["value"] = address["country"];
+							leadenhancerData.push(t);
 						}
 					}
 
@@ -150,8 +184,7 @@ function getAdditonalData(email, id, f_callback)
 	],
 	function(err, results)
 	{
-	    var target = {};
-		_.extend(target, results[0], results[1]);
+	    var target = results[0].concat(results[1]);
 	    f_callback(target);
 	});
 }
