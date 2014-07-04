@@ -191,7 +191,7 @@ function getIPbyID(id, callback)
 {
 	var ip = "11";
 	console.log("getIPbyID("+id+", &callback);");
-	api.visitors.list( function(data)
+	api.visitors.list(function(data)
 	{
 		console.log("current visitors #"+data.length);
 		//console.log(data);
