@@ -46,8 +46,8 @@ function getAdditonalData(email, id, f_callback)
 	    	{
 				eloqua.get('/API/REST/2.0/data/contacts?search='+email+'&count=1&page=1&depth=complete', function(err, response)
 				{
-					console.log("err:".err);
-					console.log("response: %j", response);
+					console.log("eq err:"+err);
+					console.log("eq response: %j", response);
 					var eloquaData = {};
 					if(response != null)
 					{
@@ -77,6 +77,7 @@ function getAdditonalData(email, id, f_callback)
 						}
 					}
 			  		//res.send("hello xx"+response);
+			  		console.log("eloquaData "+eloquaData);
 			  		callback(null, eloquaData);
 				});
 			}
@@ -140,7 +141,7 @@ function getAdditonalData(email, id, f_callback)
 					//console.log(data);
 					//console.log("--->"+d[0]["name"]);
 
-					//console.log(leadenhancerData);
+					console.log("leadenhancerData "+leadenhancerData);
 					
 					callback(null, leadenhancerData);
 				});
