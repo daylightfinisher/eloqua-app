@@ -7,7 +7,7 @@ module.exports =
 {
 	root: rootPath,
 	port: process.env.PORT || 8080,
-	sslport: 8082,
+	sslport: 443,
 	hostname: process.env.HOST || process.env.HOSTNAME,
 	db: process.env.MONGOHQ_URL,
 	templateEngine: 'swig',
