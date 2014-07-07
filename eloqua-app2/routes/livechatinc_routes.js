@@ -267,9 +267,15 @@ router.post('/v1/webhooks', function(req, res)
 			params = {};
 
 			params["license_id"] = license_id;
-			params["token"] = token;
-			params["id"] = visitor_id;
-			params["fields "] = data;
+			params["token"]      = token;
+			params["id"]         = visitor_id;
+
+			params["fields "]    =  [
+			  { name: 'Login', value: 'joe_public' },
+			  { name: 'Account ID', value: 'ABCD1234' },
+			  { name: 'Total order value', value: '$123' }
+			];
+			
 			console.log(params);
 			api.visitors.addCustomVisitorDetails(visitor_id, params,function(response)
 			{
