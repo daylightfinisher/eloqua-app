@@ -264,18 +264,18 @@ router.post('/v1/webhooks', function(req, res)
 	  	//getAdditonalData("mail@relatedpixels.com", visitor_id, function(data)
 	  	getAdditonalData(visitor_email, visitor_id, function(data)
 		{ 
-			params = {};
-
-			params["license_id"] = license_id;
-			params["token"]      = token;
-			params["id"]         = visitor_id;
-
-			params["fields "]    =  [
-			  { name: 'Login', value: 'joe_public' },
-			  { name: 'Account ID', value: 'ABCD1234' },
-			  { name: 'Total order value', value: '$123' }
-			];
-			
+			params = 
+			{
+				license_id : license_id,
+				token      : token,
+				id         : visitor_id,
+				fields     :  
+				[
+				  { name: 'Login', value: 'joe_public' },
+				  { name: 'Account ID', value: 'ABCD1234' },
+				  { name: 'Total order value', value: '$123' }
+				]
+			}
 			console.log(params);
 			api.visitors.addCustomVisitorDetails(visitor_id, params,function(response)
 			{
