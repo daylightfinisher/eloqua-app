@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
     GitHubStrategy = require('passport-github').Strategy,
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
     LinkedinStrategy = require('passport-linkedin').Strategy,
-    EloquaStrategy = require('passport-oauth').OAuth2Strategy,
+    EloquaStrategy = require('passport-oauth2').OAuth2Strategy,
     User = mongoose.model('User'),
     config = require('./config');
 
