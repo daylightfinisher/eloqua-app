@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
     GitHubStrategy = require('passport-github').Strategy,
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
     LinkedinStrategy = require('passport-linkedin').Strategy,
-    EloquaStrategy = require('passport-oauth2').OAuth2Strategy,
+    OAuth2Strategy = require('passport-oauth2'),
     User = mongoose.model('User'),
     config = require('./config');
 
@@ -154,7 +154,7 @@ module.exports = function(passport)
         }
     ));
 
-    passport.use('eloqua', new EloquaStrategy(
+    passport.use('eloqua', new OAuth2Strategy(
         {
             authorizationURL: config.eloqua.authorizationURL,
             tokenURL: config.eloqua.tokenURL,
