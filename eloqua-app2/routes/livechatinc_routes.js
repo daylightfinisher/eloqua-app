@@ -231,7 +231,7 @@ function getIPbyID(id, callback)
 		//console.log(data[0].id);
 		for(var i = 0; i < data.length; i++)
 		{
-			console.log(data[i].id + " "+data[i].name);
+			console.log(data[i].id + " "+data[i].name+ " "+data[i].ip);
 			if(data[i].id == id)
 			{
 				return callback(data[i].ip);
