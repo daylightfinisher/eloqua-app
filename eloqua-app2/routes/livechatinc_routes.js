@@ -194,7 +194,6 @@ function getLeadenhancerData(ip, callback)
 {
 	var http = require('http');
 
-	//The url we want is: 'www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
 	var options = 
 	{
 	  host: 'openapi.leadenhancer.com',
@@ -253,15 +252,8 @@ router.post('/v1/webhooks', function(req, res)
   	var visitor_email 	= req.body.visitor.email; 
   	console.log(req.body);
 
-  	var output = "";
-  	output += "event_type: "+event_type+" <br>";
-  	output += "token: "+token+" <br>";
-  	output += "license_id: "+license_id+" <br>";
-  	output += "visitor_id: "+visitor_id+" <br>";
-
   	if(event_type == "chat_started")
   	{
-	  	//getAdditonalData("mail@relatedpixels.com", visitor_id, function(data)
 	  	getAdditonalData(visitor_email, visitor_id, function(data)
 		{ 
 			params = 
@@ -269,20 +261,19 @@ router.post('/v1/webhooks', function(req, res)
 				license_id : license_id,
 				token      : token,
 				id         : visitor_id,
-				fields     :  
-				[
-				  { name: 'Login', value: 'joe_public' },
-				  { name: 'Account ID', value: 'ABCD1234' },
-				  { name: 'Total order value', value: '$123' }
-				]
+				fields     : data
 			}
 			console.log(params);
-			api.visitors.addCustomVisitorDetails(visitor_id, params,function(response)
+			api.visitors.addCustomVisitorDetails(visitor_id, params, function(response)
 			{
 				console.log(response);
 				res.send(response);
 			});		
 		});
+	}
+	else
+	{
+		res.send('Event Type not supported');
 	}
 });
 
