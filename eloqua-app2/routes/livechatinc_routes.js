@@ -262,8 +262,8 @@ router.post('/v1/webhooks', function(req, res)
   	if(event_type == "chat_started")
   	{
 	  	//getAdditonalData("mail@relatedpixels.com", visitor_id, function(data)
-	  //	getAdditonalData(visitor_email, visitor_id, function(data)
-		//{ 
+	  	getAdditonalData(visitor_email, visitor_id, function(data)
+		{ 
 			params = 
 			{
 				license_id : license_id,
@@ -282,7 +282,7 @@ router.post('/v1/webhooks', function(req, res)
 				console.log(response);
 				res.send(response);
 			});		
-		//});
+		});
 	}
 });
 
