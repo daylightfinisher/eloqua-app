@@ -216,7 +216,7 @@ function getLeadenhancerData(ip, callback)
 	  	callback(JSON.parse(str));
 	   //console.log(str);
 	  });
-	}
+	};
 	http.request(options, mycallback).end();
 }
  
