@@ -10,7 +10,8 @@ var mongoose = require('mongoose'),
 /**
   * Validations
   */
- var validatePresenceOf = function(value) {
+ var validatePresenceOf = function(value) 
+ {
      // If you are authenticating by any of the oauth strategies, don't validate.
      return (this.provider && this.provider !== 'local') || (value && value.length);
  };
@@ -18,7 +19,8 @@ var mongoose = require('mongoose'),
 /**
  * User Schema
  */
-var UserSchema = new Schema({
+var UserSchema = new Schema(
+{
     name: {
         type: String,
         required: true,
@@ -47,6 +49,7 @@ var UserSchema = new Schema({
     },
     salt: String,
     facebook: {},
+    eloqua: {},
     twitter: {},
     github: {},
     google: {},

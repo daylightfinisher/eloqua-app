@@ -48,7 +48,7 @@ module.exports = function(app, passport, db)
     }));
 
     // Only use logger for development environment
-    if (process.env.NODE_ENV === 'development')
+    if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'local_development')
     {
         app.use(morgan('dev'));
     }

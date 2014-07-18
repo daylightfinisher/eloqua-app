@@ -1,15 +1,11 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    LocalStrategy = require('passport-local').Strategy,
-    TwitterStrategy = require('passport-twitter').Strategy,
-    FacebookStrategy = require('passport-facebook').Strategy,
-    GitHubStrategy = require('passport-github').Strategy,
-    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
-    LinkedinStrategy = require('passport-linkedin').Strategy,
     OAuth2Strategy = require('passport-oauth2'),
     User = mongoose.model('User'),
+//    util = require('util'),
     config = require('./config');
+var https = require('https');
 
 module.exports = function(passport)
 {
@@ -33,126 +29,6 @@ module.exports = function(passport)
         });
     });
 
-    // Use local strategy
-    passport.use(new LocalStrategy(
-        {
-            usernameField: 'email',
-            passwordField: 'password'
-        },
-        function(email, password, done)
-        {
-            User.findOne(
-            {
-                email: email
-            }, function(err, user)
-            {
-                if (err)
-                {
-                    return done(err);
-                }
-                if (!user)
-                {
-                    return done(null, false,
-                    {
-                        message: 'Unknown user'
-                    });
-                }
-                if (!user.authenticate(password))
-                {
-                    return done(null, false,
-                    {
-                        message: 'Invalid password'
-                    });
-                }
-                return done(null, user);
-            });
-        }
-    ));
-
-    // Use twitter strategy
-    passport.use(new TwitterStrategy(
-        {
-            consumerKey: config.twitter.clientID,
-            consumerSecret: config.twitter.clientSecret,
-            callbackURL: config.twitter.callbackURL
-        },
-        function(token, tokenSecret, profile, done)
-        {
-            User.findOne(
-            {
-                'twitter.id_str': profile.id
-            }, function(err, user)
-            {
-                if (err)
-                {
-                    return done(err);
-                }
-                if (!user)
-                {
-                    user = new User(
-                    {
-                        name: profile.displayName,
-                        username: profile.username,
-                        provider: 'twitter',
-                        twitter: profile._json,
-                        roles: ['authenticated']
-                    });
-                    user.save(function(err)
-                    {
-                        if (err) console.log(err);
-                        return done(err, user);
-                    });
-                }
-                else
-                {
-                    return done(err, user);
-                }
-            });
-        }
-    ));
-
-    // Use facebook strategy
-    passport.use(new FacebookStrategy(
-        {
-            clientID: config.facebook.clientID,
-            clientSecret: config.facebook.clientSecret,
-            callbackURL: config.facebook.callbackURL
-        },
-        function(accessToken, refreshToken, profile, done)
-        {
-            User.findOne(
-            {
-                'facebook.id': profile.id
-            }, function(err, user)
-            {
-                if (err)
-                {
-                    return done(err);
-                }
-                if (!user)
-                {
-                    user = new User(
-                    {
-                        name: profile.displayName,
-                        email: profile.emails[0].value,
-                        username: profile.username || profile.emails[0].value.split('@')[0],
-                        provider: 'facebook',
-                        facebook: profile._json,
-                        roles: ['authenticated']
-                    });
-                    user.save(function(err)
-                    {
-                        if (err) console.log(err);
-                        return done(err, user);
-                    });
-                }
-                else
-                {
-                    return done(err, user);
-                }
-            });
-        }
-    ));
 
     passport.use('eloqua', new OAuth2Strategy(
         {
@@ -160,147 +36,65 @@ module.exports = function(passport)
             tokenURL: config.eloqua.tokenURL,
             clientID: config.eloqua.clientID,
             clientSecret: config.eloqua.clientSecret,
-            callbackURL: config.eloqua.callbackURL
+            callbackURL: config.eloqua.callbackURL,
+            customHeaders : 
+            {
+                'Authorization' : 'Basic '+ (new Buffer(config.eloqua.clientID+ ':'+config.eloqua.clientSecret)).toString('base64')
+            }
         },
         function(accessToken, refreshToken, profile, done)
         {
+
+            //var myauth = 'Bearer '+accessToken;
+            var myauth = 'Bearer '+ (new Buffer(accessToken)).toString('base64');
+            var options = 
+            {
+              host: 'secure.eloqua.com',
+              port: 443,
+              path: '/API/REST/1.0/data/contacts?depth=complete&search=*@relatedpixels.com&page=0&count=10',
+              'Authorization': myauth
+            };
+
+            https.get(options, function(res) 
+            {
+              console.log('Got response: ' + res.statusCode);
+            }).on('error', function(e) 
+            {
+              console.log('Got error: ' + e.message);
+              console.dir(e);
+            });
+
             User.findOne(
             {
-                'eloqua.id': profile.id
+               'eloqua.id': config.eloqua.clientID
             }, function(err, user)
             {
+                //console.log('user:'+user);
+                //console.log('profile:'+util.inspect(profile, true, null));
+                //console.dir(profile);
+                //console.log(JSON.stringify(profile));
+
+
                 if (err)
                 {
                     return done(err);
                 }
                 if (!user)
                 {
-                    console.log('user:'+user);
-                    /*
+                   // console.log(' != false');
+                    
                     user = new User(
                     {
-                        name: profile.displayName,
-                        email: profile.emails[0].value,
-                        username: profile.username || profile.emails[0].value.split('@')[0],
+                        name: 'eloqua',
+                        email: 'null@null.com',
+                        username: config.eloqua.clientID,
                         provider: 'eloqua',
-                        eloqua: profile._json,
-                        roles: ['authenticated']
-                    });
-                    user.save(function(err)
-                    {
-                        if (err) console.log(err);
-                        return done(err, user);
-                    });*/
-                }
-                else
-                {
-                    return done(err, user);
-                }
-            });
-        }
-    ));
-
-    // Use github strategy
-    passport.use(new GitHubStrategy(
-        {
-            clientID: config.github.clientID,
-            clientSecret: config.github.clientSecret,
-            callbackURL: config.github.callbackURL
-        },
-        function(accessToken, refreshToken, profile, done)
-        {
-            User.findOne(
-            {
-                'github.id': profile.id
-            }, function(err, user)
-            {
-                if (!user)
-                {
-                    user = new User(
-                    {
-                        name: profile.displayName,
-                        email: profile.emails[0].value,
-                        username: profile.username,
-                        provider: 'github',
-                        github: profile._json,
-                        roles: ['authenticated']
-                    });
-                    user.save(function(err)
-                    {
-                        if (err) console.log(err);
-                        return done(err, user);
-                    });
-                }
-                else
-                {
-                    return done(err, user);
-                }
-            });
-        }
-    ));
-
-    // Use google strategy
-    passport.use(new GoogleStrategy(
-        {
-            clientID: config.google.clientID,
-            clientSecret: config.google.clientSecret,
-            callbackURL: config.google.callbackURL
-        },
-        function(accessToken, refreshToken, profile, done)
-        {
-            User.findOne(
-            {
-                'google.id': profile.id
-            }, function(err, user)
-            {
-                if (!user)
-                {
-                    user = new User(
-                    {
-                        name: profile.displayName,
-                        email: profile.emails[0].value,
-                        username: profile.emails[0].value,
-                        provider: 'google',
-                        google: profile._json,
-                        roles: ['authenticated']
-                    });
-                    user.save(function(err)
-                    {
-                        if (err) console.log(err);
-                        return done(err, user);
-                    });
-                }
-                else
-                {
-                    return done(err, user);
-                }
-            });
-        }
-    ));
-
-    // use linkedin strategy
-    passport.use(new LinkedinStrategy(
-        {
-            consumerKey: config.linkedin.clientID,
-            consumerSecret: config.linkedin.clientSecret,
-            callbackURL: config.linkedin.callbackURL,
-            profileFields: ['id', 'first-name', 'last-name', 'email-address']
-        },
-        function(accessToken, refreshToken, profile, done)
-        {
-            User.findOne(
-            {
-                'linkedin.id': profile.id
-            }, function(err, user)
-            {
-                if (!user)
-                {
-                    user = new User(
-                    {
-                        name: profile.displayName,
-                        email: profile.emails[0].value,
-                        username: profile.emails[0].value,
-                        provider: 'linkedin',
+                        eloqua: 
+                            {
+                                id : config.eloqua.clientID,
+                                accessToken: accessToken,
+                                refreshToken: refreshToken
+                            },
                         roles: ['authenticated']
                     });
                     user.save(function(err)
