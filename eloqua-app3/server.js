@@ -35,7 +35,7 @@ var httpsServer =https.createServer(options, app);
 // Start the app by listening on <port>, optional hostname
 httpServer.listen(config.port, config.hostname);
 httpsServer.listen(config.sslport, config.hostname);
-console.log('Mean app started on port ' + config.port + ' (' + process.env.NODE_ENV + ')');
+console.log('Mean app started on port ' + config.port + '(http) & '+config.sslport+'(https) on '+config.hostname+' (' + process.env.NODE_ENV + ')');
 
 // Initializing logger
 logger.init(app, passport, mongoose);
