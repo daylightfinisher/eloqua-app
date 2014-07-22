@@ -24,6 +24,36 @@ module.exports = function(app)
 		console.log('/apps/create/:InstanceId:AssetId:SiteName');
 		console.log(req.query.instance+ ' '+ req.query.asset+ ' ' +req.query.site);
 
+		var app_id = req.query.siteid+':'+req.query.installid;
+
+		EloquaApp.findOne(
+		{
+            instanceid: app_id
+        }, function(err, eapp) 
+        {
+        	if (err) 
+        	{
+                return err;
+            }
+            if (!eapp) 
+            {
+	            var app = new EloquaApp(
+				{
+					//name: 'app1',
+					instanceid 	: app_id,
+					site 		: req.query.site,
+					site_id		: req.query.siteid,
+					install_id	: req.query.installid
+				});
+				app.save(function(err)
+		        {
+		            if (err) console.log(err);
+		            console.log('saved');
+		        });
+			}
+        });
+
+
 		res.send('<br><br>!!!'); 
 	});  	
 
@@ -38,16 +68,16 @@ module.exports = function(app)
     app.route('/apps/components/create/:guid').post(function (req, res) 
 	{ 
 		console.log('/apps/components/create/:guid');
-		var eapp = new EloquaApp(
-		{
-			name: 'service_test',
-			InstanceId: req.params.guid
-		});
-		eapp.save(function(err)
-        {
-            if (err) console.log(err);
-            console.log('saved');
-        });
+
+		res.send('<br><br>'+req.message); 
+	});
+
+
+	app.route('/apps/menu/callout/').post(function (req, res) 
+	{ 
+		console.log('/apps/menu/callout/');
+		console.log(req.body.siteId);
+
 		res.send('<br><br>'+req.message); 
 	});
 

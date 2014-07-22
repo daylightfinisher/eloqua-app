@@ -13,17 +13,27 @@ var mongoose = require('mongoose'),
  */
 var EloquaAppSchema = new Schema(
 {
-    name: {
-        type: String,
-        required: true,
+    instanceid: 
+    { 
+        type: String, 
+        unique: true,
+        required: true
     },
-    InstanceId:
+    site:
     {
-        type: String,
-        required: true,
-        index: true
-    }
+    	type: String
+    },
+    site_id:
+    {
+    	type: String
+    },
+    install_id:
+    {
+    	type: String
+    },
 
+
+    description: String
 });
 
 
