@@ -18,6 +18,7 @@ module.exports = function(app)
 		res.send('hello <br>');
     });
 
+    // App
 
   	app.route('/apps/create/?').post(function (req, res) 
 	{ 
@@ -64,7 +65,7 @@ module.exports = function(app)
 		res.send('yes'); 
 	});
 
-
+	// Action Service
     app.route('/apps/components/create/:guid').post(function (req, res) 
 	{ 
 		console.log('/apps/components/create/:guid');
@@ -73,12 +74,48 @@ module.exports = function(app)
 	});
 
 
+    // Menu Service
 	app.route('/apps/menu/callout/').post(function (req, res) 
 	{ 
 		console.log('/apps/menu/callout/');
 		console.log(req.body.siteId);
 
 		res.send('<br><br>'+req.message); 
+	});
+
+
+	// Decision Service
+	app.route('/apps/menu/decide/create?').post(function (req, res) 
+	{ 
+		console.log('/apps/menu/decide/create/');
+		console.log(req.query.instance+ ' ');
+
+		var dto =
+		    {
+		       	'recordDefinition' :
+		        {
+		            'ContactID' : '{{Contact.Id}}',
+		            'EmailAddress' : '{{Contact.Field(C_EmailAddress)}}'
+		        }
+		    };
+
+
+		res.send(dto);
+	});
+
+	app.route('/apps/menu/decide/config?').post(function (req, res) 
+	{ 
+		console.log('/apps/menu/decide/config/');
+
+
+		res.send('x');
+	});
+
+	app.route('/apps/menu/decide/delete?').post(function (req, res) 
+	{ 
+		console.log('/apps/menu/decide/delete/');
+
+		res.send('x');
 	});
 
 /*	 
