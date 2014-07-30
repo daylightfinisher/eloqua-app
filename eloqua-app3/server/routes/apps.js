@@ -66,9 +66,43 @@ module.exports = function(app)
 	});
 
 	// Action Service
-    app.route('/apps/components/create/:guid').post(function (req, res) 
+    app.route('/apps/components/create?').post(function (req, res) 
 	{ 
 		console.log('/apps/components/create/:guid');
+		console.log(req.query.instance+ ' ');
+
+		var dto =
+		    {
+		       	'recordDefinition' :
+		        {
+		            'ContactID' : '{{Contact.Id}}',
+		            'EmailAddress' : '{{Contact.Field(C_EmailAddress)}}'
+		        }
+		    };
+
+
+		res.send(dto);
+	});    
+
+	app.route('/apps/components/config?').post(function (req, res) 
+	{ 
+		console.log('/apps/components/config');
+
+		res.send('<br><br>'+req.message); 
+	});    
+
+	app.route('/apps/components/delete?').post(function (req, res) 
+	{ 
+		console.log('/apps/components/delete');
+
+		res.send('<br><br>'+req.message); 
+	});	
+
+	app.route('/apps/components/notify?').post(function (req, res) 
+	{ 
+		console.log('/apps/components/notify');
+		console.log(req.query.instance+ ' ');
+		console.log(req.query.asset+ ' ');
 
 		res.send('<br><br>'+req.message); 
 	});
