@@ -106,8 +106,8 @@ module.exports = function(app)
 		console.log('/apps/components/notify');
 		console.log(req.query.instance+ ' ');
 		console.log(req.query.asset+ ' ');
-		console.dir(req);
-	
+		console.dir(req.body);
+
 
 		res.status(204); 
 		res.send();
