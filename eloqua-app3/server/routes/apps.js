@@ -9,6 +9,9 @@ module.exports = function(app)
 //	var middle 	= require('../lib/route_db_middleware');
 	var mongoose = require('mongoose');
 	var EloquaApp = mongoose.model('EloquaApp');
+	var async   = require('async');
+	var https = require('https');
+	var querystring = require('querystring');
 
     app.route('/apps').get(apps.render);
 
@@ -84,14 +87,14 @@ module.exports = function(app)
 		res.send(dto);
 	});    
 
-	app.route('/apps/components/config?').post(function (req, res) 
+	app.route('/apps/components/config?').get(function (req, res) 
 	{ 
 		console.log('/apps/components/config');
 
-		res.send('<br><br>'+req.message); 
+		res.send('<br><br><br><br> hello'+req.message); 
 	});    
 
-	app.route('/apps/components/delete?').post(function (req, res) 
+	app.route('/apps/components/delete?').delete(function (req, res) 
 	{ 
 		console.log('/apps/components/delete');
 
@@ -103,8 +106,78 @@ module.exports = function(app)
 		console.log('/apps/components/notify');
 		console.log(req.query.instance+ ' ');
 		console.log(req.query.asset+ ' ');
+		console.dir(req.body);
 
-		res.send('<br><br>'+req.message); 
+		res.status(204); 
+		res.send();
+
+		async.waterfall([
+		    function(callback)
+		    {
+		    	var post_data = querystring.stringify(
+		    	{
+			  		'name': 'Bulk Import Example',
+			  		'fields': 
+			  		{
+			  			'email': '{{Contact.Field(C_EmailAddress)}}'
+			  		},
+			  		'syncActions': 
+			  		{
+			  			'destination': '{{ActionInstance('+req.query.instance+')}}',
+			  			'action': 'setStatus',
+			  			'status': 'complete'
+			  		},
+			  		'identifierFieldName': 'email'
+			  	});
+
+		    	var options = 
+	            {
+	              	host: 'secure.eloqua.com',
+	              	port: 443,
+	              	path: '/api/bulk/2.0/contacts/imports',
+	              	headers: 
+	              	{
+		          		'Content-Type': 'application/json',
+		          		'Content-Length': post_data.length
+		      		}
+	            };
+
+	           	var post_req = https.get(options, function(res) 
+		            {
+			            console.log('Got response: ' + res.statusCode);
+			            res.on('data', function(chunk) 
+			            {
+			            	console.log('response: ' + chunk);
+
+			            });
+			            res.on('error', function(e) 
+			            {
+			            	console.log('Got error: ' + e.message);
+			            	console.dir(e);
+			            });
+		        	});
+			    post_req.write(post_data);
+  				post_req.end();
+			    callback(null, 'one', 'two');
+
+		    },
+		    function(arg1, arg2, callback){
+		      // arg1 now equals 'one' and arg2 now equals 'two'
+		        callback(null, 'three');
+		    },
+		    function(arg1, callback){
+		        // arg1 now equals 'three'
+		        callback(null, 'done');
+		    }
+		], function (err, result) 
+		{
+	   		// result now equals 'done'  
+	   		console.error('async error');
+	   		console.log(result);
+	   		console.log(err);
+		});
+
+
 	});
 
 
