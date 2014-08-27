@@ -91,6 +91,54 @@ module.exports = function(app)
 	{ 
 		console.log('/apps/components/config');
 
+		var post_data = querystring.stringify(
+    	{
+	  		'name': 'Bulk Import Example',
+	  		'fields': 
+	  		{
+	  			'email': '{{Contact.Field(C_EmailAddress)}}'
+	  		},
+	  		'syncActions': 
+	  		{
+	  			'destination': '{{ActionInstance('+req.query.instance+')}}',
+	  			'action': 'setStatus',
+	  			'status': 'complete'
+	  		},
+	  		'identifierFieldName': 'email'
+	  	});
+
+    	var options = 
+        {
+          	host: 'secure.eloqua.com',
+          	port: 443,
+          	method: 'PUT',
+          	path: '/api/cloud/1.0/actions/instances/'+req.query.instanc,
+          	headers: 
+          	{
+          		'Content-Type': 'application/json',
+          		'Content-Length': post_data.length
+      		}
+        };
+
+       	var post_req = https.request(options, function(response) 
+            {
+	            console.log('Got response: ' + response.statusCode);
+	            console.dir(response.body);
+	            console.dir(response.message);
+	            response.on('data', function(chunk) 
+	            {
+	            	console.log('response: ' + chunk);
+
+	            });
+	            response.on('error', function(e) 
+	            {
+	            	console.log('Got error: ' + e.message);
+	            	console.dir(e);
+	            });
+        	});
+	    post_req.write(post_data);
+		post_req.end();
+
 		res.send('<br><br><br><br> hello'+req.message); 
 	});    
 
@@ -104,9 +152,9 @@ module.exports = function(app)
 	app.route('/apps/components/notify?').post(function (req, res) 
 	{ 
 		console.log('/apps/components/notify');
-		console.log(req.query.instance+ ' ');
-		console.log(req.query.asset+ ' ');
-		console.dir(req.body);
+		console.log('instance_id: '+req.query.instance+ ' ');
+		console.log('asset_id: '+req.query.asset+ ' ');
+		console.dir('body: '+req.body);
 
 
 		res.status(204); 
@@ -118,9 +166,10 @@ module.exports = function(app)
 		    	var post_data = querystring.stringify(
 		    	{
 			  		'name': 'Bulk Import Example',
+			  		'updateRule' : 'always',
 			  		'fields': 
 			  		{
-			  			'email': '{{Contact.Field(C_EmailAddress)}}'
+			  			'emailAddress': '{{Contact.Field(C_EmailAddress)}}'
 			  		},
 			  		'syncActions': 
 			  		{
@@ -128,7 +177,7 @@ module.exports = function(app)
 			  			'action': 'setStatus',
 			  			'status': 'complete'
 			  		},
-			  		'identifierFieldName': 'email'
+			  		'identifierFieldName': 'emailAddress'
 			  	});
 
 		    	var options = 
@@ -143,9 +192,9 @@ module.exports = function(app)
 		      		}
 	            };
 
-	           	var post_req = https.get(options, function(res) 
+	           	var post_req = https.post(options, function(res) 
 		            {
-			            console.log('Got response: ' + res.statusCode);
+			            console.log('Got response: (' + res.statusCode+') '+ res.body);
 			            res.on('data', function(chunk) 
 			            {
 			            	console.log('response: ' + chunk);
