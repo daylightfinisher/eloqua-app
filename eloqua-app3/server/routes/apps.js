@@ -12,6 +12,7 @@ module.exports = function(app)
 	var async   = require('async');
 	var https = require('https');
 	var querystring = require('querystring');
+	var config = require('../config/config');
 
     app.route('/apps').get(apps.render);
 
@@ -154,7 +155,7 @@ module.exports = function(app)
 		console.log('/apps/components/notify');
 		console.log('instance_id: '+req.query.instance+ ' ');
 		console.log('asset_id: '+req.query.asset+ ' ');
-		console.dir('body: '+req.body);
+		console.dir(req.body);
 
 
 		res.status(204); 
@@ -189,7 +190,8 @@ module.exports = function(app)
 	              	headers: 
 	              	{
 		          		'Content-Type': 'application/json',
-		          		'Content-Length': post_data.length
+		          		'Content-Length': post_data.length,
+		          		'Authorization' : 'Basic '+ (new Buffer(config.eloqua.clientID+ ':'+config.eloqua.clientSecret)).toString('base64')
 		      		}
 	            };
 
