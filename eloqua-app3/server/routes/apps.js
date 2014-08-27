@@ -185,6 +185,7 @@ module.exports = function(app)
 	              	host: 'secure.eloqua.com',
 	              	port: 443,
 	              	path: '/api/bulk/2.0/contacts/imports',
+	              	method: 'POST',
 	              	headers: 
 	              	{
 		          		'Content-Type': 'application/json',
@@ -192,7 +193,7 @@ module.exports = function(app)
 		      		}
 	            };
 
-	           	var post_req = https.post(options, function(res) 
+	           	var post_req = https.request(options, function(res) 
 		            {
 			            console.log('Got response: (' + res.statusCode+') '+ res.body);
 			            res.on('data', function(chunk) 
