@@ -63,6 +63,7 @@ module.exports = function(passport)
             {
                 console.log('called: '+options.host+''+options.path);
                 console.log('Got response: ' + res.statusCode);
+                console.dir(res.body);
             }).on('error', function(e) 
             {
               console.log('Got error: ' + e.message);
