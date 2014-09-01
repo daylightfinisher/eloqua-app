@@ -30,7 +30,7 @@ module.exports = function(passport)
     });
 
 
-    passport.use('eloqua', new OAuth2Strategy(
+    var eloquaStrategy = new OAuth2Strategy(
         {
             authorizationURL: config.eloqua.authorizationURL,
             tokenURL: config.eloqua.tokenURL,
@@ -40,12 +40,6 @@ module.exports = function(passport)
             customHeaders : 
             {
                 'Authorization' : 'Basic '+ (new Buffer(config.eloqua.clientID+ ':'+config.eloqua.clientSecret)).toString('base64')
-            },
-            skipUserProfile : function(accessToken, done) 
-            {
-                return done(null, 
-                    {abc: 'abc'}
-                );
             }
         },
         function(accessToken, refreshToken, profile, done)
@@ -121,5 +115,12 @@ module.exports = function(passport)
                 }
             });
         }
-    ));
+    );
+    eloquaStrategy.userProfile = function(accessToken, done) 
+    {
+        return done(null, 
+            {abc: 'abc'}
+            );
+    };
+    passport.use('eloqua', eloquaStrategy);
 };
