@@ -41,7 +41,7 @@ module.exports = function(passport)
             {
                 'Authorization' : 'Basic '+ (new Buffer(config.eloqua.clientID+ ':'+config.eloqua.clientSecret)).toString('base64')
             },
-            userProfile : function(accessToken, done) 
+            skipUserProfile : function(accessToken, done) 
             {
                 return done(null, 
                     {abc: 'abc'}
