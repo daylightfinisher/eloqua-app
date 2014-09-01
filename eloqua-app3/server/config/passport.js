@@ -40,6 +40,12 @@ module.exports = function(passport)
             customHeaders : 
             {
                 'Authorization' : 'Basic '+ (new Buffer(config.eloqua.clientID+ ':'+config.eloqua.clientSecret)).toString('base64')
+            },
+            userProfile : function(accessToken, done) 
+            {
+                return done(null, 
+                    {abc: 'abc'}
+                );
             }
         },
         function(accessToken, refreshToken, profile, done)
@@ -77,8 +83,8 @@ module.exports = function(passport)
             {
                 //console.log('user:'+user);
                 //console.log('profile:'+util.inspect(profile, true, null));
-                //console.dir(profile);
-                //console.log(JSON.stringify(profile));
+                console.dir(profile);
+                console.log(JSON.stringify(profile));
 
 
                 if (err)
