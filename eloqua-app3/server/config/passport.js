@@ -44,9 +44,9 @@ module.exports = function(passport)
         },
         function(accessToken, refreshToken, profile, done)
         {
-
             //var myauth = 'Bearer '+accessToken;
-            var myauth = 'Bearer '+ (new Buffer(accessToken)).toString('base64');
+            var myauth = 'Bearer '+ accessToken;
+            //var myauth = 'Bearer '+ (new Buffer(accessToken)).toString('base64');
             var options = 
             {
               host: 'secure.eloqua.com',
@@ -57,7 +57,8 @@ module.exports = function(passport)
 
             https.get(options, function(res) 
             {
-              console.log('Got response: ' + res.statusCode);
+                console.log('called: '+options.host+''+options.path);
+                console.log('Got response: ' + res.statusCode);
             }).on('error', function(e) 
             {
               console.log('Got error: ' + e.message);
