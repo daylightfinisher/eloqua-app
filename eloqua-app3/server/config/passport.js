@@ -52,10 +52,14 @@ module.exports = function(passport)
               host: 'secure.eloqua.com',
               port: 443,
               path: '/API/REST/1.0/data/contacts?depth=complete&search=*@relatedpixels.com&page=0&count=10',
-              'Authorization': myauth
+              method: 'GET',
+              headers:
+              {
+                'Authorization': myauth
+              }
             };
 
-            https.get(options, function(res) 
+            https.request(options, function(res) 
             {
                 console.log('called: '+options.host+''+options.path);
                 console.log('Got response: ' + res.statusCode);
